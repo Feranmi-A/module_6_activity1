@@ -1,68 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app1
+  name: app
 spec:
-  replicas: 1
+  replicas: 3  # Three identical replicas
   selector:
     matchLabels:
-      app: app1
+      app: myapp
   template:
     metadata:
       labels:
-        app: app1
+        app: myapp
+        track: stable
     spec:
       containers:
-      - name: app1
-        image: nginx:alpine  # Replace with your actual image
+      - name: app
+        image: nginx:alpine  
         env:
         - name: APP_NAME
-          value: "App1"
+          value: "MyApp"
         ports:
         - containerPort: 3000
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: app2
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: app2
-  template:
-    metadata:
-      labels:
-        app: app2
-    spec:
-      containers:
-      - name: app2
-        image: nginx:alpine  # Replace with your actual image
-        env:
-        - name: APP_NAME
-          value: "App2"
-        ports:
-        - containerPort: 3000
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: app3
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: app3
-  template:
-    metadata:
-      labels:
-        app: app3
-    spec:
-      containers:
-      - name: app3
-        image: nginx:alpine 
-        env:
-        - name: APP_NAME
-          value: "App3"
-        ports:
-        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
