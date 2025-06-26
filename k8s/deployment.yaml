@@ -1,4 +1,3 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,11 +14,14 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: myapp:latest     # built and loaded into Minikube
+        image: myapp:latest
         ports:
         - containerPort: 3000
-        # expose the POD name so your app can log/respond with $HOSTNAME
         env:
+        - name: APP_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name: POD_NAME
           valueFrom:
             fieldRef:
