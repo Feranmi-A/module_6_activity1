@@ -1,9 +1,10 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: myapp
 spec:
-  replicas: 3  # Three identical replicas
+  replicas: 3
   selector:
     matchLabels:
       app: myapp
@@ -11,19 +12,15 @@ spec:
     metadata:
       labels:
         app: myapp
-        track: stable
     spec:
       containers:
-      - name: app
-        image: app:latest
-        env:
-        - name: APP_NAME
-          value: "MyApp"
+      - name: myapp
+        image: myapp:latest     # built and loaded into Minikube
         ports:
         - containerPort: 3000
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 5
+        # expose the POD name so your app can log/respond with $HOSTNAME
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
