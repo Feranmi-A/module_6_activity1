@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: nginx:alpine  
+        image: app:latest
         env:
         - name: APP_NAME
           value: "MyApp"
